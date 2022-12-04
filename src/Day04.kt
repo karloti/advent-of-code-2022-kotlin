@@ -1,21 +1,18 @@
 fun main() {
-    fun String.splitBounds(): Sequence<List<Int>> =
-        Regex("""(\d+).(\d+).(\d+).(\d+)""").findAll(this).map { it.groupValues.drop(1).map(String::toInt) }
+    fun Sequence<String>.splitBounds() = map { it.split('-', ',').map(String::toInt) }
 
-    fun part1(input: String): Int =
-        input.splitBounds().count { (a, b, c, d) -> (a in c..d && b in c..d) || (c in a..b && d in a..b) }
+    fun part1(input: Sequence<String>): Int =
+        input.splitBounds().count { (a, b, c, d) -> (a <= c) && (b >= d) || (a >= c) && (b >= d) }
 
-    fun part2(input: String): Int =
-        input.splitBounds().count { (a, b, c, d) -> a in c..d || b in c..d || c in a..b || d in a..b }
+    fun part2(input: Sequence<String>): Int =
+        input.splitBounds().count { (a, b, c, d) -> a <= d && c <= b }
 
-    val inputTest = readInputAsText("Day04_test")
-    check(part1(inputTest) == 2)
-    check(part2(inputTest) == 4)
+    check(part1(readInputAsSequence("Day04_test")) == 2)
+    check(part2(readInputAsSequence("Day04_test")) == 4)
 
-    val input = readInputAsText("Day04")
-    println(part1(input))
-    println(part2(input))
+    println(part1(readInputAsSequence("Day04")))
+    println(part2(readInputAsSequence("Day04")))
 
-    check(part1(input) == 580)
-    check(part2(input) == 895)
+    check(part1(readInputAsSequence("Day04")) == 580)
+    check(part2(readInputAsSequence("Day04")) == 895)
 }
