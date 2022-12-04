@@ -1,16 +1,21 @@
 fun main() {
-    fun Sequence<String>.splitToSets(): Sequence<List<Set<Int>>> =
-        map { it.split(',').map { it.split('-').map(String::toInt).let { (a, b) -> (a..b).toSet() } } }
+    fun String.splitBounds(): Sequence<List<Int>> =
+        Regex("""(\d+).(\d+).(\d+).(\d+)""").findAll(this).map { it.groupValues.drop(1).map(String::toInt) }
 
-    fun part1(input: Sequence<String>): Int =
-        input.splitToSets().count { (s1: Set<Int>, s2: Set<Int>) -> s1.containsAll(s2) || s2.containsAll(s1) }
+    fun part1(input: String): Int =
+        input.splitBounds().count { (a, b, c, d) -> (a in c..d && b in c..d) || (c in a..b && d in a..b) }
 
-    fun part2(input: Sequence<String>): Int =
-        input.splitToSets().count { (s1: Set<Int>, s2: Set<Int>) -> s1.any(s2::contains) || s1.any(s2::contains) }
+    fun part2(input: String): Int =
+        input.splitBounds().count { (a, b, c, d) -> (a..b).toSet().let { (c..d).any(it::contains) } }
 
-    check(part1(readInputAsSequence("Day04_test")) == 2)
-    check(part2(readInputAsSequence("Day04_test")) == 4)
+    val inputTest = readInputAsText("Day04_test")
+    check(part1(inputTest) == 2)
+    check(part2(inputTest) == 4)
 
-    println(part1(readInputAsSequence("Day04")))
-    println(part2(readInputAsSequence("Day04")))
+    val input = readInputAsText("Day04")
+    println(part1(input))
+    println(part2(input))
+
+    check(part1(input) == 580)
+    check(part2(input) == 895)
 }
