@@ -6,7 +6,7 @@ fun main() {
         input.splitBounds().count { (a, b, c, d) -> (a in c..d && b in c..d) || (c in a..b && d in a..b) }
 
     fun part2(input: String): Int =
-        input.splitBounds().count { (a, b, c, d) -> (a..b).toSet().let { (c..d).any(it::contains) } }
+        input.splitBounds().count { (a, b, c, d) -> a in c..d || b in c..d || c in a..b || d in a..b }
 
     val inputTest = readInputAsText("Day04_test")
     check(part1(inputTest) == 2)
