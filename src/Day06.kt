@@ -4,9 +4,7 @@ import kotlin.time.measureTimedValue
 // Kaloyan Karaivanov (my)
 fun String.indexOf(n: Int): Int = asSequence()
     .withIndex()
-    .runningFold(mutableMapOf<Char, Int>() to -1) { (m, r), (i, c) ->
-        m to (m.put(c, i)?.coerceAtLeast(r) ?: r)
-    }
+    .runningFold(mutableMapOf<Char, Int>() to -1) { (m, r), (i, c) -> m to (m.put(c, i)?.coerceAtLeast(r) ?: r) }
     .withIndex()
     .indexOfFirst { (index, value) -> index - value.second - 1 == n }
 
