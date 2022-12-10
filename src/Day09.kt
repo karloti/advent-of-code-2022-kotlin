@@ -3,7 +3,8 @@ import kotlin.math.sign
 
 data class Point(val x: Int, val y: Int) {
     operator fun plus(other: Point): Point = Point(x + other.x, y + other.y)
-    infix fun moveTo(d: Point): Point = takeIf { (x - d.x).absoluteValue <= 1 && (y - d.y).absoluteValue <= 1 } ?: Point(x + (d.x - x).sign, y + (d.y - y).sign)
+    infix fun moveTo(d: Point): Point = takeIf { (x - d.x).absoluteValue <= 1 && (y - d.y).absoluteValue <= 1 }
+        ?: Point(x + (d.x - x).sign, y + (d.y - y).sign)
 }
 
 fun String.toPoints() = split(' ')
