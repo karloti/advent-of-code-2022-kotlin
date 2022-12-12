@@ -11,8 +11,8 @@ fun Point.adjPoints(points: List<List<Point>>, compare: (Int, Int) -> Boolean): 
     .mapNotNull { (v1, h1) -> points.getOrNull(v + v1)?.getOrNull(h + h1) }
     .filter { compare(valueByChar[c]!!, valueByChar[it.c]!!) }
 
-fun solution(input: List<String>, startChar: Char, endChar: Char, compare: (Int, Int) -> Boolean): Int? {
-    val points: List<List<Point>> = input.toPoints()
+fun List<String>.solution(startChar: Char, endChar: Char, compare: (Int, Int) -> Boolean): Int? {
+    val points: List<List<Point>> = toPoints()
     val startPoint: Point = points.flatten().first { it.c == startChar }
     val queue = ArrayDeque<Point>().apply { add(startPoint.apply { d = 0 }) }
     while (queue.isNotEmpty()) queue.removeFirst().apply {
@@ -23,6 +23,6 @@ fun solution(input: List<String>, startChar: Char, endChar: Char, compare: (Int,
 }
 
 fun main() {
-    solution(readInput("Day12"), 'S', 'E') { i1, i2 -> i2 in 0..i1 + 1 }.let(::println)
-    solution(readInput("Day12"), 'E', 'a') { i1, i2 -> i1 in 0..i2 + 1 }.let(::println)
+    readInput("Day12").solution('S', 'E') { i1, i2 -> i2 in 0..i1 + 1 }.let(::println)
+    readInput("Day12").solution('E', 'a') { i1, i2 -> i1 in 0..i2 + 1 }.let(::println)
 }
