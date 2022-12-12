@@ -1,3 +1,4 @@
+/*
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -38,4 +39,4 @@ fun main() {
     val input: List<String> = readInput("Day09")
     check(input.solution(2).also(::println) == 5779)
     check(input.solution(10).also(::println) == 2331)
-}
+}*/
