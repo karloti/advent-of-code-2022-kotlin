@@ -1,18 +1,25 @@
+/**
+ * https://github.com/dfings/advent-of-code/blob/main/src/2022/problem_13.main.kts
+ * @author Dan Fingal-Surma
+ */
+
 sealed interface PacketData : Comparable<PacketData>
 
 data class ListValue(val values: List<PacketData>) : PacketData {
     override fun toString() = values.toString()
     override operator fun compareTo(other: PacketData): Int = when (other) {
-        is ListValue -> values.zip(other.values).asSequence()
+        is IntValue -> compareTo(ListValue(listOf(other)))
+        is ListValue -> values
+            .zip(other.values)
+            .asSequence()
             .map { (a, b) -> a.compareTo(b) }
             .firstOrNull { it != 0 } ?: values.size.compareTo(other.values.size)
-        else -> compareTo(ListValue(listOf(other)))
     }
 }
 
 data class IntValue(val value: Int) : PacketData {
     override fun toString() = value.toString()
-    override operator fun compareTo(other: PacketData ): Int = when (other) {
+    override operator fun compareTo(other: PacketData): Int = when (other) {
         is IntValue -> value.compareTo(other.value)
         is ListValue -> ListValue(listOf(this)).compareTo(other)
     }
@@ -42,24 +49,22 @@ fun ArrayDeque<Char>.parsePacketData(): PacketData {
 }
 
 fun main() {
-    val test = "[1,2,[1]]".parsePacketData().let(::println)
+    val input = readInput("Day13")
+    input
+        .filter(String::isNotBlank)
+        .map(String::parsePacketData)
+        .chunked(2)
+        .mapIndexed { i, it -> if (it[0] < it[1]) i + 1 else 0 }
+        .sum()
+        .let { check(it.also(::println) == 6086) }
 
-//    val input = readInput("Day13_test")
-//    input
-//        .filter(String::isNotBlank)
-//        .map(String::parsePacketData)
-//        .chunked(2)
-//        .mapIndexed { i, it -> if (it[0] < it[1]) i + 1 else 0 }
-//        .sum()
-//        .let(::println)
-//
-//    val two = "[[2]]".parsePacketData()
-//    val six = "[[6]]".parsePacketData()
-//    input
-//        .filter(String::isNotBlank)
-//        .map(String::parsePacketData)
-//        .plus(listOf(two, six))
-//        .sorted()
-//        .run { (indexOf(two) + 1) * indexOf(six) + 1 }
-//        .let(::println)
+    val two = "[[2]]".parsePacketData()
+    val six = "[[6]]".parsePacketData()
+    input
+        .filter(String::isNotBlank)
+        .map(String::parsePacketData)
+        .plus(listOf(two, six))
+        .sorted()
+        .run { (indexOf(two) + 1) * indexOf(six) + 1 }
+        .let { check(it.also(::println) == 27798) }
 }
